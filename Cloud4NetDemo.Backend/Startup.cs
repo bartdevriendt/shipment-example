@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Cloud4NetDemo.Application.Extensions;
 using Cloud4NetDemo.Application.Services;
 using Cloud4NetDemo.Backend.Extensions;
+using Cloud4NetDemo.Backend.Middlewares;
 using Cloud4NetDemo.Domain.Entities;
 using Cloud4NetDemo.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
@@ -66,6 +67,7 @@ namespace Cloud4NetDemo.Backend
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseMiddleware<ErrorHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

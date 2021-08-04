@@ -45,15 +45,18 @@
 
     private async Task HandleValidSubmit()
     {
-        try
+        var result = await ShipService.ShipPackage(Request);
+        if (result.Succeeded)
         {
-            Response = await ShipService.ShipPackage(Request);
+            Response = result.Data;
             ErrorMessage = "";
         }
-        catch (Exception ex)
+        else
         {
-            ErrorMessage = ex.Message;
+            Response = null;
+            ErrorMessage = result.Messages.FirstOrDefault();
         }
+   
     // Process the valid form
     }
 }

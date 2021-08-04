@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Cloud4NetDemo.Shared;
+using Cloud4NetDemo.Shared.Wrapper;
 
 namespace Cloud4NetDemo.Frontend.Services
 {
@@ -16,15 +17,11 @@ namespace Cloud4NetDemo.Frontend.Services
             _httpClient = httpClient;
         }
 
-        public async Task<ShipmentTrackerDto> ShipPackage(ShipmentRequestDto request)
+        public async Task<Result<ShipmentTrackerDto>> ShipPackage(ShipmentRequestDto request)
         {
             var response = await _httpClient.PostAsJsonAsync(
                 "api/ship", request);
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new Exception("Error shipping product");
-            }
-            return await response.Content.ReadFromJsonAsync<ShipmentTrackerDto>();
+            return await response.Content.ReadFromJsonAsync<Result<ShipmentTrackerDto>>();
         }
     }
 }
