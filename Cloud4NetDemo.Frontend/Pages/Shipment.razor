@@ -1,0 +1,59 @@
+﻿@page "/shipment"
+@using Cloud4NetDemo.Shared
+@using Cloud4NetDemo.Frontend.Services
+@inject ShipmentService ShipService
+
+<h3>Shipment</h3>
+
+<EditForm Model="@Request" OnValidSubmit="@HandleValidSubmit">
+     <DataAnnotationsValidator />
+     <ValidationSummary />
+     
+    <InputText id="customerId" @bind-Value="Request.CustomerId" />
+    <InputText id="packageId" @bind-Value="Request.PackageId" />
+     
+     
+    <button type="submit">Ship</button>
+</EditForm>
+
+@if (Response != null)
+{
+    <div>
+        <p>Tracking Number: @Response.TrackingNumber</p>
+        <p>Customer Name: @Response.PackageDescription</p>
+        <p>Package Description: @Response.CustomerName</p>
+    </div>
+}
+
+@if (ErrorMessage != null)
+{
+    @ErrorMessage
+}
+
+@code {
+    private ShipmentRequestDto Request { get; set; }
+    
+    private ShipmentTrackerDto Response { get; set; }
+    
+    private string ErrorMessage { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Request = new ShipmentRequestDto();
+        base.OnInitialized();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            Response = await ShipService.ShipPackage(Request);
+            ErrorMessage = "";
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
+    // Process the valid form
+    }
+}

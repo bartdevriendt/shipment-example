@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cloud4NetDemo.Application.Extensions;
 using Cloud4NetDemo.Application.Services;
+using Cloud4NetDemo.Backend.Extensions;
 using Cloud4NetDemo.Domain.Entities;
 using Cloud4NetDemo.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
@@ -30,7 +31,10 @@ namespace Cloud4NetDemo.Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.UseGeneralRoutePrefix("/api");
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "Cloud4NetDemo.Backend", Version = "v1"});
@@ -53,6 +57,9 @@ namespace Cloud4NetDemo.Backend
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cloud4NetDemo.Backend v1"));
             }
+            
+            app.UseBlazorFrameworkFiles();
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 
@@ -60,7 +67,11 @@ namespace Cloud4NetDemo.Backend
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapFallbackToFile("index.html");
+            });
         }
     }
 }
