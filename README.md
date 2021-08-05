@@ -10,7 +10,7 @@ Install .NET Core 5
 
 ## Running the code
 
-cd Cloud4NetDemo.Backend
+cd Cloud4NetDemo.Backend<br/>
 dotnet run
 
 Navigate your browser to http://localhost:5000
